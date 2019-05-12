@@ -6,3 +6,9 @@
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+
+.trix-button-row {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+  }

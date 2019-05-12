@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\Posts\CreatePostsRequest;
 use App\Post;
+use App\Category;
 use App\Http\Requests\Posts\UpdatePostRequest;
 
 class PostsController extends Controller
@@ -26,7 +27,7 @@ class PostsController extends Controller
      */
     public function create()
     {
-        return view('posts.create');
+        return view('posts.create')->with('categories', Category::all());
     }
 
     /**
@@ -46,7 +47,8 @@ class PostsController extends Controller
             'description' => $request->description,
             'content' => $request->content,
             'image' => $image,
-            'published_at' => $request->published_at
+            'published_at' => $request->published_at,
+            'category_id' => $request->category
         ]);
 
         //flash the message
@@ -75,7 +77,7 @@ class PostsController extends Controller
      */
     public function edit(Post $post)
     {
-        return view('posts.create')->withPost($post);
+        return view('posts.create')->withPost($post)->with('categories', Category::all());
     }
 
     /**
@@ -143,5 +145,18 @@ class PostsController extends Controller
         $trashed = Post::onlyTrashed()->get();
 
         return view('posts.index')->withPosts($trashed); //same with with('posts', $trashed)
+    }
+
+    // Function to restore the post if the user decided to undo the trashed function
+    public function restore($id)
+    {
+
+        $post = Post::withTrashed()->where('id', $id)->firstOrFail();
+
+        $post->restore();
+
+        session()->flash('success','Post restored successfully.');
+
+        return redirect()->back();
     }
 }
