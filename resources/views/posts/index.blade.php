@@ -31,9 +31,11 @@
                         </td>
 
                         <td>
-                        <a href="{{ route('categories.edit', $post->category->id )}}">
-                            {{ $post->category->name }}
-                        </a>
+                            <a href="{{route('categories.edit', $post->category->id) }}" >
+                            {{-- category here is define from the Post model --}}
+                                {{ $post->category->name }}
+                            </a>
+
                         </td>
 
                             @if(!$post->trashed())
