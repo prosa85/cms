@@ -10,6 +10,8 @@
 
     <div class="card-body">
 
+        @include('partials.errors')
+
         <form action="{{ isset($post) ? route('posts.update', $post->id) : route('posts.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
 
@@ -83,7 +85,25 @@
                 </select>
 
             </div>
+            @if($tags->count() > 0 )
+            <div class="form-group">
+                <label for="tags">tags</label>
 
+                <select name="tags[]" id="tags" class="form-control tags-selector" multiple>
+                    @foreach($tags as $tag)
+                        <option value="{{ $tag->id }}"
+                            @if(isset($post))
+                                @if($post->hasTag($tag->id))
+                                        selected
+                                @endif
+                            @endif
+                        >
+                        {{ $tag->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            @endif
         <div class="form-group">
             <button type="submit" class="btn btn-success">
                 {{isset($post) ? 'Update Post' : 'Create Post'}}
@@ -102,10 +122,15 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/trix/1.1.1/trix.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>
 
 <script>
    flatpickr('#published_at', {
        enableTime: true
+   })
+
+   $(document).ready(function() {
+    $('.tags-selector').select2();
    })
 </script>
 
@@ -117,5 +142,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/trix/1.1.1/trix.css">
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" rel="stylesheet" />
 
 @endsection
