@@ -1,6 +1,6 @@
 <?php
 
-use App\Post;
+//use App\Post;
 use App\Category;
 use App\Tag;
 use Illuminate\Database\Seeder;
