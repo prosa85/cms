@@ -42,4 +42,14 @@ class User extends Authenticatable
         return $this->role === 'admin';
     }
 
+    public function isWriter()
+    {
+        return $this->role === 'writer';
+    }
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+
 }
