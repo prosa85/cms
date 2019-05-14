@@ -1,5 +1,7 @@
 <?php
 
+
+use App\Http\Controllers\Blog\PostsController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -11,9 +13,9 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'WelcomeController@index');
+
+Route::get('blog/posts/{post}',[PostsController::class, 'show'])->name('blog.show');
 
 Auth::routes();
 
@@ -43,4 +45,7 @@ Route::middleware(['auth','admin'])->group(function () {
 
 });
 
-
+Route::middleware(['auth','writer'])->group(function() {
+    Route::get('users/profile', 'UsersController@edit')->name('users.edit-profile');
+    Route::put('users/profile', 'UsersController@update')->name('users.update-profile');
+});
